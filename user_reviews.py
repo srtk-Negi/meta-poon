@@ -31,9 +31,11 @@ with open("test.txt", "a", encoding="utf-8") as f:
             parser = BeautifulSoup(user_reviews_text, "lxml")
 
             # First Review
-            first_review = parser.find("li", class_="review user_review first_review")
+            first_review = parser.find(
+                "li", class_="review user_review first_review")
             first_user_name = first_review.find("div", class_="name").text
-            first_user_score = first_review.find("div", class_="review_grade").text
+            first_user_score = first_review.find(
+                "div", class_="review_grade").text
             first_date = first_review.find("div", class_="date").text
             first_helpfulratio_numerator = first_review.find(
                 "span", class_="total_ups"
@@ -75,7 +77,8 @@ with open("test.txt", "a", encoding="utf-8") as f:
                 user_name = review.find("div", class_="name").text
                 user_score = review.find("div", class_="review_grade").text
                 date = review.find("div", class_="date").text
-                helpfulratio_numerator = review.find("span", class_="total_ups").text
+                helpfulratio_numerator = review.find(
+                    "span", class_="total_ups").text
                 helpfulratio_denominator = review.find(
                     "span", class_="total_thumbs"
                 ).text
@@ -83,7 +86,8 @@ with open("test.txt", "a", encoding="utf-8") as f:
                 f.write(f"Username: {user_name.strip()}\n")
                 f.write(f"User Score: {user_score.strip()}\n")
                 f.write(f"Date: {date.strip()}\n")
-                f.write(f"Helpful Ratio Numerator: {helpfulratio_numerator.strip()}\n")
+                f.write(
+                    f"Helpful Ratio Numerator: {helpfulratio_numerator.strip()}\n")
                 f.write(
                     f"Helpful Ratio Denominator: {helpfulratio_denominator.strip()}\n"
                 )
