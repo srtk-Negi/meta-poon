@@ -11,7 +11,7 @@ user_review_page = requests.get(
     headers=headers,
 ).text
 
-parser = BeautifulSoup(user_review_page, "lxml")
+parser = BeautifulSoup(user_review_page, "html.parser")
 
 last_page_number = int(parser.find_all("li", class_="page")[-1].find("a").text)
 print(last_page_number)
@@ -28,21 +28,34 @@ with open("test.txt", "a", encoding="utf-8") as f:
                 headers=headers,
             ).text
 
-            parser = BeautifulSoup(user_reviews_text, "lxml")
+            parser = BeautifulSoup(user_reviews_text, "html.parser")
 
             # First Review
-            first_review = parser.find(
-                "li", class_="review user_review first_review")
-            first_user_name = first_review.find("div", class_="name").text
-            first_user_score = first_review.find(
-                "div", class_="review_grade").text
-            first_date = first_review.find("div", class_="date").text
-            first_helpfulratio_numerator = first_review.find(
-                "span", class_="total_ups"
-            ).text
-            first_helpfulratio_denominator = first_review.find(
-                "span", class_="total_thumbs"
-            ).text
+            first_user_name = (
+                parser.find("li", class_="review user_review first_review")
+                .find("div", class_="name")
+                .text
+            )
+            first_user_score = (
+                parser.find("li", class_="review user_review first_review")
+                .find("div", class_="review_grade")
+                .text
+            )
+            first_date = (
+                parser.find("li", class_="review user_review first_review")
+                .find("div", class_="date")
+                .text
+            )
+            first_helpfulratio_numerator = (
+                parser.find("li", class_="review user_review first_review")
+                .find("span", class_="total_ups")
+                .text
+            )
+            first_helpfulratio_denominator = (
+                parser.find("li", class_="review user_review first_review")
+                .find("span", class_="total_thumbs")
+                .text
+            )
             f.write(f"Username: {first_user_name.strip()}\n")
             f.write(f"User Score: {first_user_score.strip()}\n")
             f.write(f"Date: {first_date.strip()}\n")
@@ -54,13 +67,14 @@ with open("test.txt", "a", encoding="utf-8") as f:
             )
 
             first_review_text = (
-                first_review.find("div", class_="review_body")
+                parser.find("li", class_="review user_review first_review")
+                .find("div", class_="review_body")
                 .text.replace("\n", "")
                 .strip()
             )
             if "Expand" in first_review_text:
                 first_review_expanded_text = (
-                    parser.find("li", class_="c")
+                    parser.find("li", class_="review user_review first_review")
                     .find("div", class_="review_body")
                     .find("span", class_="blurb blurb_expanded")
                     .text.replace("\n", "")
@@ -77,8 +91,7 @@ with open("test.txt", "a", encoding="utf-8") as f:
                 user_name = review.find("div", class_="name").text
                 user_score = review.find("div", class_="review_grade").text
                 date = review.find("div", class_="date").text
-                helpfulratio_numerator = review.find(
-                    "span", class_="total_ups").text
+                helpfulratio_numerator = review.find("span", class_="total_ups").text
                 helpfulratio_denominator = review.find(
                     "span", class_="total_thumbs"
                 ).text
@@ -86,8 +99,7 @@ with open("test.txt", "a", encoding="utf-8") as f:
                 f.write(f"Username: {user_name.strip()}\n")
                 f.write(f"User Score: {user_score.strip()}\n")
                 f.write(f"Date: {date.strip()}\n")
-                f.write(
-                    f"Helpful Ratio Numerator: {helpfulratio_numerator.strip()}\n")
+                f.write(f"Helpful Ratio Numerator: {helpfulratio_numerator.strip()}\n")
                 f.write(
                     f"Helpful Ratio Denominator: {helpfulratio_denominator.strip()}\n"
                 )
@@ -108,6 +120,40 @@ with open("test.txt", "a", encoding="utf-8") as f:
                     f.write(f"User Review: {middle_review_text}\n\n")
 
             # Last Review
+            last_username = (
+                parser.find("li", class_="review user_review last_review")
+                .find("div", class_="name")
+                .text
+            )
+            last_user_score = (
+                parser.find("li", class_="review user_review last_review")
+                .find("div", class_="review_grade")
+                .text
+            )
+            last_date = (
+                parser.find("li", class_="review user_review last_review")
+                .find("div", class_="date")
+                .text
+            )
+            last_helpfulratio_numerator = (
+                parser.find("li", class_="review user_review last_review")
+                .find("span", class_="total_ups")
+                .text
+            )
+            last_helpfulratio_denominator = (
+                parser.find("li", class_="review user_review last_review")
+                .find("span", class_="total_thumbs")
+                .text
+            )
+
+            f.write(f"Username: {last_username.strip()}\n")
+            f.write(f"User Score: {last_user_score.strip()}\n")
+            f.write(f"Date: {last_date.strip()}\n")
+            f.write(f"Helpful Ratio Numerator: {last_helpfulratio_numerator.strip()}\n")
+            f.write(
+                f"Helpful Ratio Denominator: {last_helpfulratio_denominator.strip()}\n"
+            )
+
             last_review_text = (
                 parser.find("li", class_="review user_review last_review")
                 .find("div", class_="review_body")
